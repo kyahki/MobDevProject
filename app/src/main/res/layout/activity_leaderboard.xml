@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/green"
+    android:backgroundTint="@color/green"
+    tools:context=".Leaderboard">
+
+
+    <LinearLayout
+        android:layout_width="349dp"
+        android:layout_height="742dp"
+        android:background="#F8F5D9"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="LEADERBOARD"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/textView25"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    app:srcCompat="@drawable/npc"
+                    tools:srcCompat="@drawable/npc" />
+
+                <TextView
+                    android:id="@+id/textView16"
+                    android:layout_width="81dp"
+                    android:layout_height="match_parent"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/textView22"
+                    android:layout_width="104dp"
+                    android:layout_height="match_parent"
+                    android:text="TextView" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    app:srcCompat="@drawable/npc"
+                    tools:srcCompat="@drawable/npc" />
+
+                <TextView
+                    android:id="@+id/textView23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/textView24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </TableLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

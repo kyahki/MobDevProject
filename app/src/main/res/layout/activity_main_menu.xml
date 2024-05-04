@@ -11,7 +11,7 @@
 
     <TableRow
         android:id="@+id/tableRow"
-        android:layout_width="410dp"
+        android:layout_width="match_parent"
         android:layout_height="77dp"
         android:background="@color/green"
         android:backgroundTint="@color/green"
@@ -26,8 +26,8 @@
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="384dp"
-                android:layout_height="match_parent"
+                android:layout_width="375dp"
+                android:layout_height="807dp"
                 android:layout_weight="5"
                 android:fontFamily="sans-serif-condensed"
                 android:text="Menu"
@@ -132,7 +132,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <ScrollView
-        android:id="@+id/scrollView2"
+        android:id="@+id/mainScrollView"
         android:layout_width="390dp"
         android:layout_height="503dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -145,7 +145,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="83dp">
+                android:layout_height="100dp">
 
                 <TextView
                     android:id="@+id/textView2"

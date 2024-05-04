@@ -15,6 +15,12 @@
         android:theme="@style/Theme.MobDevProject"
         tools:targetApi="31">
         <activity
+            android:name=".Leaderboard"
+            android:exported="false" />
+        <activity
+            android:name=".UserProfile"
+            android:exported="false" />
+        <activity
             android:name=".MainMenu"
             android:exported="false" />
         <activity
