@@ -372,8 +372,8 @@
     </ScrollView>
 
     <LinearLayout
-        android:layout_width="421dp"
-        android:layout_height="76dp"
+        android:layout_width="400dp"
+        android:layout_height="81dp"
         android:background="@color/green"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -383,6 +383,18 @@
         app:layout_constraintTop_toBottomOf="@+id/scrollView2"
         app:layout_constraintVertical_bias="1.0">
 
+        <TextView
+            android:id="@+id/pointCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Points: "
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/button12"
             android:layout_width="wrap_content"
@@ -390,12 +402,6 @@
             android:layout_weight="1"
             android:backgroundTint="@color/green" />
 
-        <Button
-            android:id="@+id/button14"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="@color/green" />
 
         <Button
             android:id="@+id/btnAddSched"
@@ -415,11 +421,14 @@
             android:backgroundTint="@color/green" />
 
         <Button
-            android:id="@+id/button16"
+            android:id="@+id/btnFinish"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:backgroundTint="@color/green" />
+            android:backgroundTint="#F8F5D9"
+            android:text="Update"
+            android:textColor="@color/green"
+            android:textSize="10sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

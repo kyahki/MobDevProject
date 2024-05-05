@@ -53,10 +53,12 @@
                     tools:srcCompat="@drawable/npc" />
 
                 <TextView
-                    android:id="@+id/textView16"
-                    android:layout_width="81dp"
-                    android:layout_height="match_parent"
-                    android:text="TextView" />
+                    android:id="@+id/pointCounter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Points: 0"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/textView22"
@@ -77,11 +79,12 @@
                     tools:srcCompat="@drawable/npc" />
 
                 <TextView
-                    android:id="@+id/textView23"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/pointCounter2"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
-
+                    android:text="Points: 0"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
                 <TextView
                     android:id="@+id/textView24"
                     android:layout_width="wrap_content"

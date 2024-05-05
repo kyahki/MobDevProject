@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +28,9 @@ public class MainMenu extends AppCompatActivity {
 
     private static final int MIN_DISTANCE = 150;
     private List<String> tasks = new ArrayList<>();
-    private TextView currentTextView;
+    private int points = 0;
+    private TextView currentTextView,pointCounter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +38,7 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         Button btnAddSched = findViewById(R.id.btnAddSched);
         ScrollView scrollView = findViewById(R.id.mainScrollView);
+
 
 
 
@@ -91,6 +98,18 @@ public class MainMenu extends AppCompatActivity {
             }
         });
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == points && resultCode == RESULT_OK) {
+            if (data != null && data.hasExtra("updated_points")) {
+                int updatedPoints = data.getIntExtra("updated_points", 0);
+
+                pointCounter.setText("Points: " + updatedPoints);
+            }
+        }
+    }
+
 
     private void setTimeTextViewClickListener(int textViewId, final String time) {
         TextView textView = findViewById(textViewId);
@@ -111,15 +130,38 @@ public class MainMenu extends AppCompatActivity {
         EditText editTextTask = view.findViewById(R.id.editTextTask);
         ListView listViewTasks = view.findViewById(R.id.listViewTasks);
 
-
         List<String> tasksForCurrentTime = new ArrayList<>();
         for (String task : tasks) {
             if (task.contains(time)) {
                 tasksForCurrentTime.add(task);
             }
         }
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tasksForCurrentTime);
         listViewTasks.setAdapter(adapter);
+
+        TextView pointCounter = view.findViewById(R.id.pointCounter);
+
+        final int[] points = {0};
+        for (String task : tasksForCurrentTime) {
+            if (task.contains("[Completed]")) {
+                points[0]++;
+            }
+        }
+        pointCounter.setText("Points: " + points[0]);
+
+        listViewTasks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String task = tasksForCurrentTime.get(position);
+                if (!task.contains("[Completed]")) {
+                    tasksForCurrentTime.set(position, "[Completed] " + task);
+                    adapter.notifyDataSetChanged();
+                    points[0]++;
+                    pointCounter.setText("Points: " + points[0]);
+                }
+            }
+        });
 
         builder.setView(view);
 
@@ -139,9 +181,30 @@ public class MainMenu extends AppCompatActivity {
 
         builder.setNegativeButton("Cancel", null);
 
+        builder.setNeutralButton("Finish", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                for (int i = 0; i < tasksForCurrentTime.size(); i++) {
+                    if (tasksForCurrentTime.get(i).contains("[Completed]")) {
+                        tasksForCurrentTime.remove(i);
+                        i--;
+                    }
+                }
+                adapter.notifyDataSetChanged();
+                Toast.makeText(MainMenu.this, "Tasks completed and removed", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.putExtra("updated_points", points[0]);
+                setResult(RESULT_OK, intent);
+            }
+        });
+
         Dialog dialog = builder.create();
         dialog.show();
     }
+
+
+
+
 
 
 
