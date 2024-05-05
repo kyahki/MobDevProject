@@ -421,14 +421,12 @@
             android:backgroundTint="@color/green" />
 
         <Button
-            android:id="@+id/btnFinish"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="#F8F5D9"
-            android:text="Update"
-            android:textColor="@color/green"
-            android:textSize="10sp" />
+        android:id="@+id/button122"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="@color/green" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

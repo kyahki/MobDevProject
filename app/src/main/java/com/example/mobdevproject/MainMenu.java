@@ -28,7 +28,7 @@ public class MainMenu extends AppCompatActivity {
 
     private static final int MIN_DISTANCE = 150;
     private List<String> tasks = new ArrayList<>();
-    private int points = 0;
+    final int[] points = {0};
     private TextView currentTextView,pointCounter;
 
 
@@ -38,7 +38,7 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         Button btnAddSched = findViewById(R.id.btnAddSched);
         ScrollView scrollView = findViewById(R.id.mainScrollView);
-
+        pointCounter = findViewById(R.id.pointCounter);
 
 
 
@@ -72,6 +72,7 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
+
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             private float x1, x2;
 
@@ -98,17 +99,8 @@ public class MainMenu extends AppCompatActivity {
             }
         });
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == points && resultCode == RESULT_OK) {
-            if (data != null && data.hasExtra("updated_points")) {
-                int updatedPoints = data.getIntExtra("updated_points", 0);
 
-                pointCounter.setText("Points: " + updatedPoints);
-            }
-        }
-    }
+
 
 
     private void setTimeTextViewClickListener(int textViewId, final String time) {
@@ -121,6 +113,10 @@ public class MainMenu extends AppCompatActivity {
                 showAddScheduleDialog(time);
             }
         });
+    }
+
+    private void updatePoints(){
+        pointCounter.setText("Points: " + points[0]);
     }
     private void showAddScheduleDialog(String time) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -142,7 +138,7 @@ public class MainMenu extends AppCompatActivity {
 
         TextView pointCounter = view.findViewById(R.id.pointCounter);
 
-        final int[] points = {0};
+
         for (String task : tasksForCurrentTime) {
             if (task.contains("[Completed]")) {
                 points[0]++;
@@ -192,9 +188,10 @@ public class MainMenu extends AppCompatActivity {
                 }
                 adapter.notifyDataSetChanged();
                 Toast.makeText(MainMenu.this, "Tasks completed and removed", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent();
-                intent.putExtra("updated_points", points[0]);
-                setResult(RESULT_OK, intent);
+//                Intent intent = new Intent();
+//                intent.putExtra("updated_points", points[0]);
+//                setResult(RESULT_OK, intent);
+                updatePoints();
             }
         });
 
