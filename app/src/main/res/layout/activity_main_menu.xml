@@ -32,7 +32,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="Menu"
                 android:textAlignment="center"
-                android:textColor="#FFFFFF"
+                android:textColor="#F8F5D9"
                 android:textSize="34sp" />
 
         </LinearLayout>
@@ -140,14 +140,13 @@
         app:layout_constraintTop_toBottomOf="@+id/textView7">
 
         <TableLayout
+            android:id="@+id/tableLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/tableLayout">
+            android:layout_height="100dp">
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/sixam"
@@ -157,6 +156,14 @@
                     android:textAlignment="textStart"
                     android:textColor="@color/green"
                     android:textSize="34sp" />
+
+                <Button
+                    android:onClick="ShowPopup"
+                    android:id="@+id/btnToDo6AM"
+                    android:layout_width="243dp"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="#E91E63"
+                    android:text="Button" />
 
             </TableRow>
 
@@ -171,6 +178,13 @@
                     android:text="7:00 AM"
                     android:textColor="@color/green"
                     android:textSize="34sp" />
+
+                <Button
+                    android:onClick="ShowPopup"
+                    android:id="@+id/btnToDo7AM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Button" />
 
             </TableRow>
 
@@ -198,7 +212,8 @@
                     android:layout_height="wrap_content"
                     android:text="9:00 AM"
                     android:textColor="@color/green"
-                    android:textSize="34sp"/>
+                    android:textSize="34sp" />
+
             </TableRow>
 
             <TableRow
@@ -211,7 +226,8 @@
                     android:layout_height="wrap_content"
                     android:text="10:00 AM"
                     android:textColor="@color/green"
-                    android:textSize="34sp"/>
+                    android:textSize="34sp" />
+
             </TableRow>
 
             <TableRow
@@ -224,7 +240,8 @@
                     android:layout_height="wrap_content"
                     android:text="11:00 AM"
                     android:textColor="@color/green"
-                    android:textSize="34sp"/>
+                    android:textSize="34sp" />
+
             </TableRow>
 
             <TableRow
@@ -237,7 +254,7 @@
                     android:layout_height="wrap_content"
                     android:text="12:00 PM"
                     android:textColor="@color/green"
-                    android:textSize="34sp"/>
+                    android:textSize="34sp" />
             </TableRow>
 
             <TableRow
@@ -250,7 +267,7 @@
                     android:layout_height="wrap_content"
                     android:text="1:00 PM"
                     android:textColor="@color/green"
-                    android:textSize="34sp"/>
+                    android:textSize="34sp" />
             </TableRow>
 
             <TableRow
@@ -263,7 +280,7 @@
                     android:layout_height="wrap_content"
                     android:text="2:00 PM"
                     android:textColor="@color/green"
-                    android:textSize="34sp"/>
+                    android:textSize="34sp" />
             </TableRow>
 
             <TableRow
@@ -276,7 +293,7 @@
                     android:layout_height="wrap_content"
                     android:text="3:00 PM"
                     android:textColor="@color/green"
-                    android:textSize="34sp"/>
+                    android:textSize="34sp" />
             </TableRow>
 
             <TableRow
@@ -289,7 +306,7 @@
                     android:layout_height="wrap_content"
                     android:text="4:00 PM"
                     android:textColor="@color/green"
-                    android:textSize="34sp"/>
+                    android:textSize="34sp" />
             </TableRow>
 
             <TableRow
@@ -302,7 +319,7 @@
                     android:layout_height="wrap_content"
                     android:text="5:00 PM"
                     android:textColor="@color/green"
-                    android:textSize="34sp"/>
+                    android:textSize="34sp" />
             </TableRow>
 
             <TableRow
@@ -315,8 +332,9 @@
                     android:layout_height="wrap_content"
                     android:text="6:00 PM"
                     android:textColor="@color/green"
-                    android:textSize="34sp"/>
+                    android:textSize="34sp" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -327,8 +345,9 @@
                     android:layout_height="wrap_content"
                     android:text="7:00 PM"
                     android:textColor="@color/green"
-                    android:textSize="34sp"/>
+                    android:textSize="34sp" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -339,8 +358,9 @@
                     android:layout_height="wrap_content"
                     android:text="8:00 PM"
                     android:textColor="@color/green"
-                    android:textSize="34sp"/>
+                    android:textSize="34sp" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -351,8 +371,9 @@
                     android:layout_height="wrap_content"
                     android:text="9:00 PM"
                     android:textColor="@color/green"
-                    android:textSize="34sp"/>
+                    android:textSize="34sp" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -363,7 +384,7 @@
                     android:layout_height="wrap_content"
                     android:text="10:00 PM"
                     android:textColor="@color/green"
-                    android:textSize="34sp"/>
+                    android:textSize="34sp" />
             </TableRow>
 
         </TableLayout>

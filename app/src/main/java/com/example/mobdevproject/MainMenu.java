@@ -14,18 +14,20 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.PopupWindow;
 
+import androidx.annotation.AnimRes;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-
+import android.view.MotionEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainMenu extends AppCompatActivity {
-
+    Dialog myDialog;
     private static final int MIN_DISTANCE = 150;
     private List<String> tasks = new ArrayList<>();
     final int[] points = {0};
@@ -39,7 +41,7 @@ public class MainMenu extends AppCompatActivity {
         Button btnAddSched = findViewById(R.id.btnAddSched);
         ScrollView scrollView = findViewById(R.id.mainScrollView);
         pointCounter = findViewById(R.id.pointCounter);
-
+        myDialog = new Dialog(this);
 
 
         setTimeTextViewClickListener(R.id.sixam, "6:00 AM");
@@ -73,6 +75,32 @@ public class MainMenu extends AppCompatActivity {
         });
 
 
+//        scrollView.setOnTouchListener(new View.OnTouchListener() {
+//            private float x1, x2;
+//
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        x1 = event.getX();
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        x2 = event.getX();
+//                        float deltaX = x2 - x1;
+//                        if (Math.abs(deltaX) > MIN_DISTANCE) {
+//                            if (x2 > x1) {
+//                                Intent i = new Intent(MainMenu.this, UserProfile.class);
+//                                startActivity(i);
+//                            } else {
+//                                Intent i = new Intent(MainMenu.this, Leaderboard.class);
+//                                startActivity(i);
+//                            }
+//                        }
+//                        break;
+//                }
+//                return false;
+//            }
+//        });
+
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             private float x1, x2;
 
@@ -87,20 +115,43 @@ public class MainMenu extends AppCompatActivity {
                         if (Math.abs(deltaX) > MIN_DISTANCE) {
                             if (x2 > x1) {
                                 Intent i = new Intent(MainMenu.this, UserProfile.class);
-                                startActivity(i);
+
+                                startActivityWithAnimation(i, R.anim.slide_in_left, R.anim.slide_out_right);
                             } else {
                                 Intent i = new Intent(MainMenu.this, Leaderboard.class);
-                                startActivity(i);
+
+                                startActivityWithAnimation(i, R.anim.slide_in_right, R.anim.slide_out_left);
                             }
                         }
                         break;
                 }
                 return false;
             }
+
+
+            private void startActivityWithAnimation(Intent intent, @AnimRes int enterAnim, @AnimRes int exitAnim) {
+                startActivity(intent);
+                overridePendingTransition(enterAnim, exitAnim);
+            }
         });
     }
 
-
+    public void ShowPopup(View v)
+    {
+        TextView txtclose;
+        Button btnFollow;
+        myDialog.setContentView(R.layout.activity_pop_up_screen);
+        txtclose = (TextView) myDialog.findViewById(R.id.txtClose);
+//        Button = (Button)
+        txtclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                myDialog.dismiss();
+            }
+        });
+        myDialog.show();
+    }
 
 
     private void setTimeTextViewClickListener(int textViewId, final String time) {
