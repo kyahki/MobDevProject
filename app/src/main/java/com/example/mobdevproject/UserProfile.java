@@ -7,6 +7,7 @@ import android.widget.ScrollView;
 import android.content.Intent;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.AnimRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -15,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class UserProfile extends AppCompatActivity {
 
     float x1,x2,y1,y2;
+    private static final int MIN_DISTANCE = 150;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,15 +38,27 @@ public class UserProfile extends AppCompatActivity {
             case MotionEvent.ACTION_UP:
                 x2 = touchEvent.getX();
                 y2 = touchEvent.getY();
-                if(x1 > x2){
-                    Intent i = new Intent(UserProfile.this, MainMenu.class);
-                    startActivity(i);
-                }else if(x1 > x2){
-                Intent i = new Intent(UserProfile.this, MainMenu.class);
-                startActivity(i);
-            }
-            break;
+                float deltaX = x2 - x1;
+                float deltaY = y2 - y1;
+                if(Math.abs(deltaX) > MIN_DISTANCE || Math.abs(deltaY) > MIN_DISTANCE) {
+                    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                        if (x1 > x2) {
+                            Intent i = new Intent(UserProfile.this, MainMenu.class);
+                            startActivityWithAnimation(i, R.anim.slide_in_right, R.anim.slide_out_left);
+                        }
+//                        else {
+//                            Intent i = new Intent(UserProfile.this, UserProfile.class);
+//                            startActivityWithAnimation(i, R.anim.slide_in_left, R.anim.slide_out_right);
+//                        }
+                    }
+                }
+                break;
         }
         return false;
+    }
+
+    private void startActivityWithAnimation(Intent intent, @AnimRes int enterAnim, @AnimRes int exitAnim) {
+        startActivity(intent);
+        overridePendingTransition(enterAnim, exitAnim);
     }
 }
