@@ -1,9 +1,10 @@
 package com.example.mobdevproject;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,25 +15,21 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.PopupWindow;
 
 import androidx.annotation.AnimRes;
 import androidx.appcompat.app.AppCompatActivity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.view.MotionEvent;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainMenu extends AppCompatActivity {
-    Dialog myDialog;
     private static final int MIN_DISTANCE = 150;
     private List<String> tasks = new ArrayList<>();
-    final int[] points = {0};
-    private TextView currentTextView,pointCounter;
+    private int points = 0;
 
+    private int pointsReturned;
+    private TextView currentTextView, pointCounter;
+    private static final int REQUEST_CODE_SHOP = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +38,6 @@ public class MainMenu extends AppCompatActivity {
         Button btnAddSched = findViewById(R.id.btnAddSched);
         ScrollView scrollView = findViewById(R.id.mainScrollView);
         pointCounter = findViewById(R.id.pointCounter);
-        myDialog = new Dialog(this);
 
 
         setTimeTextViewClickListener(R.id.sixam, "6:00 AM");
@@ -62,44 +58,76 @@ public class MainMenu extends AppCompatActivity {
         setTimeTextViewClickListener(R.id.ninepm, "9:00 PM");
         setTimeTextViewClickListener(R.id.tenpm, "10:00 PM");
 
+        Button btnMonday = findViewById(R.id.btnMonday);
+        Button btnTuesday = findViewById(R.id.btnTuesday);
+        Button btnWednesday = findViewById(R.id.btnWednesday);
+        Button btnThursday = findViewById(R.id.btnThursday);
+        Button btnFriday = findViewById(R.id.btnFriday);
+        Button btnSaturday = findViewById(R.id.btnSaturday);
+        Button btnSunday = findViewById(R.id.btnSunday);
+
+        // Set click listeners for each button
+        btnMonday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recreateActivity();
+            }
+        });
+
+        btnTuesday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recreateActivity();
+            }
+        });
+
+        btnWednesday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recreateActivity();
+            }
+        });
+
+        btnThursday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recreateActivity();
+            }
+        });
+
+        btnFriday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recreateActivity();
+            }
+        });
+
+        btnSaturday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recreateActivity();
+            }
+        });
+
+        btnSunday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recreateActivity();
+            }
+        });
+
+
         btnAddSched.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentTextView != null) {
-
                     showAddScheduleDialog(currentTextView.getText().toString());
+
                 } else {
                     Toast.makeText(MainMenu.this, "Select a time slot first", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
-//        scrollView.setOnTouchListener(new View.OnTouchListener() {
-//            private float x1, x2;
-//
-//            public boolean onTouch(View v, MotionEvent event) {
-//                switch (event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        x1 = event.getX();
-//                        break;
-//                    case MotionEvent.ACTION_UP:
-//                        x2 = event.getX();
-//                        float deltaX = x2 - x1;
-//                        if (Math.abs(deltaX) > MIN_DISTANCE) {
-//                            if (x2 > x1) {
-//                                Intent i = new Intent(MainMenu.this, UserProfile.class);
-//                                startActivity(i);
-//                            } else {
-//                                Intent i = new Intent(MainMenu.this, Leaderboard.class);
-//                                startActivity(i);
-//                            }
-//                        }
-//                        break;
-//                }
-//                return false;
-//            }
-//        });
 
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             private float x1, x2;
@@ -115,11 +143,10 @@ public class MainMenu extends AppCompatActivity {
                         if (Math.abs(deltaX) > MIN_DISTANCE) {
                             if (x2 > x1) {
                                 Intent i = new Intent(MainMenu.this, UserProfile.class);
-
                                 startActivityWithAnimation(i, R.anim.slide_in_left, R.anim.slide_out_right);
                             } else {
-                                Intent i = new Intent(MainMenu.this, Leaderboard.class);
-
+                                Intent i = new Intent(MainMenu.this, Shop.class);
+                                i.putExtra("points", points);
                                 startActivityWithAnimation(i, R.anim.slide_in_right, R.anim.slide_out_left);
                             }
                         }
@@ -127,31 +154,24 @@ public class MainMenu extends AppCompatActivity {
                 }
                 return false;
             }
-
-
-            private void startActivityWithAnimation(Intent intent, @AnimRes int enterAnim, @AnimRes int exitAnim) {
-                startActivity(intent);
-                overridePendingTransition(enterAnim, exitAnim);
-            }
         });
     }
-
-    public void ShowPopup(View v)
-    {
-        TextView txtclose;
-        Button btnFollow;
-        myDialog.setContentView(R.layout.activity_pop_up_screen);
-        txtclose = (TextView) myDialog.findViewById(R.id.txtClose);
-//        Button = (Button)
-        txtclose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                myDialog.dismiss();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SHOP) {
+            if (resultCode == RESULT_OK) {
+                int returnedPoints = data.getIntExtra("returnedPoints", 0);
+                updatePoints(returnedPoints);
             }
-        });
-        myDialog.show();
+        }
     }
+
+    private void startActivityWithAnimation(Intent intent, @AnimRes int enterAnim, @AnimRes int exitAnim) {
+        startActivityForResult(intent, REQUEST_CODE_SHOP);
+        overridePendingTransition(enterAnim, exitAnim);
+    }
+
 
 
     private void setTimeTextViewClickListener(int textViewId, final String time) {
@@ -160,15 +180,16 @@ public class MainMenu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 currentTextView = (TextView) v;
-
                 showAddScheduleDialog(time);
             }
         });
     }
 
-    private void updatePoints(){
-        pointCounter.setText("Points: " + points[0]);
+    private void updatePoints(int points) {
+
+        pointCounter.setText("Points: " + points);
     }
+
     private void showAddScheduleDialog(String time) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add Schedule");
@@ -188,14 +209,7 @@ public class MainMenu extends AppCompatActivity {
         listViewTasks.setAdapter(adapter);
 
         TextView pointCounter = view.findViewById(R.id.pointCounter);
-
-
-        for (String task : tasksForCurrentTime) {
-            if (task.contains("[Completed]")) {
-                points[0]++;
-            }
-        }
-        pointCounter.setText("Points: " + points[0]);
+        pointCounter.setText("Points: " + points);
 
         listViewTasks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -204,8 +218,8 @@ public class MainMenu extends AppCompatActivity {
                 if (!task.contains("[Completed]")) {
                     tasksForCurrentTime.set(position, "[Completed] " + task);
                     adapter.notifyDataSetChanged();
-                    points[0]++;
-                    pointCounter.setText("Points: " + points[0]);
+                    points++;
+                    pointCounter.setText("Points: " + points);
                 }
             }
         });
@@ -239,26 +253,17 @@ public class MainMenu extends AppCompatActivity {
                 }
                 adapter.notifyDataSetChanged();
                 Toast.makeText(MainMenu.this, "Tasks completed and removed", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent();
-//                intent.putExtra("updated_points", points[0]);
-//                setResult(RESULT_OK, intent);
-                updatePoints();
+                updatePoints(points);
             }
         });
 
         Dialog dialog = builder.create();
         dialog.show();
     }
+    private void recreateActivity() {
 
-
-
-
-
-
-
-
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
 }
-
-
-
-

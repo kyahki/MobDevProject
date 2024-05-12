@@ -15,10 +15,13 @@
         android:theme="@style/Theme.MobDevProject"
         tools:targetApi="31">
         <activity
+            android:name=".shopping"
+            android:exported="false" />
+        <activity
             android:name=".PopUpScreen"
             android:exported="false" />
         <activity
-            android:name=".Leaderboard"
+            android:name=".Shop"
             android:exported="false" />
         <activity
             android:name=".UserProfile"

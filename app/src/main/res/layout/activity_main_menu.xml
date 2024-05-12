@@ -157,13 +157,7 @@
                     android:textColor="@color/green"
                     android:textSize="34sp" />
 
-                <Button
-                    android:onClick="ShowPopup"
-                    android:id="@+id/btnToDo6AM"
-                    android:layout_width="243dp"
-                    android:layout_height="match_parent"
-                    android:backgroundTint="#E91E63"
-                    android:text="Button" />
+
 
             </TableRow>
 
@@ -179,12 +173,7 @@
                     android:textColor="@color/green"
                     android:textSize="34sp" />
 
-                <Button
-                    android:onClick="ShowPopup"
-                    android:id="@+id/btnToDo7AM"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Button" />
+
 
             </TableRow>
 
