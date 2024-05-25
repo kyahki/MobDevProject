@@ -20,6 +20,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/UserPoints"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Current Points: "
+            android:textSize="24sp" />
+
+        <TextView
             android:id="@+id/textView17"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -53,7 +60,7 @@
             android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/textView21"
+            android:id="@+id/UserPoints"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="Missed Tasks:"

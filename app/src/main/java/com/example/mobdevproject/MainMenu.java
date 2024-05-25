@@ -30,6 +30,7 @@ public class MainMenu extends AppCompatActivity {
     private int pointsReturned;
     private TextView currentTextView, pointCounter;
     private static final int REQUEST_CODE_SHOP = 1;
+    private static final int REQUEST_CODE_USER_PROFILE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,10 +144,13 @@ public class MainMenu extends AppCompatActivity {
                         if (Math.abs(deltaX) > MIN_DISTANCE) {
                             if (x2 > x1) {
                                 Intent i = new Intent(MainMenu.this, UserProfile.class);
+                                i.putExtra("points", points);
+                                startActivityForResult(i, REQUEST_CODE_USER_PROFILE);
                                 startActivityWithAnimation(i, R.anim.slide_in_left, R.anim.slide_out_right);
                             } else {
                                 Intent i = new Intent(MainMenu.this, Shop.class);
                                 i.putExtra("points", points);
+                                startActivityForResult(i, REQUEST_CODE_SHOP);
                                 startActivityWithAnimation(i, R.anim.slide_in_right, R.anim.slide_out_left);
                             }
                         }
@@ -159,16 +163,14 @@ public class MainMenu extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_SHOP) {
-            if (resultCode == RESULT_OK) {
-                int returnedPoints = data.getIntExtra("returnedPoints", 0);
-                updatePoints(returnedPoints);
-            }
+        if ((requestCode == REQUEST_CODE_SHOP || requestCode == REQUEST_CODE_USER_PROFILE) && resultCode == RESULT_OK) {
+            int returnedPoints = data.getIntExtra("returnedPoints", 0);
+            updatePoints(returnedPoints);
         }
     }
 
     private void startActivityWithAnimation(Intent intent, @AnimRes int enterAnim, @AnimRes int exitAnim) {
-        startActivityForResult(intent, REQUEST_CODE_SHOP);
+        startActivity(intent);
         overridePendingTransition(enterAnim, exitAnim);
     }
 
@@ -185,8 +187,8 @@ public class MainMenu extends AppCompatActivity {
         });
     }
 
-    private void updatePoints(int points) {
-
+    private void updatePoints(int Newpoints) {
+        points = Newpoints;
         pointCounter.setText("Points: " + points);
     }
 

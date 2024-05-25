@@ -48,6 +48,7 @@ public class Shop extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Shop.this, popupLoad.class);
+                intent.putExtra("points", pointscounter);
                 startActivity(intent);
             }
         });
@@ -57,6 +58,7 @@ public class Shop extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Shop.this, buyNetflix.class);
+                intent.putExtra("points", pointscounter);
                 startActivity(intent);
             }
         });
@@ -92,6 +94,7 @@ public class Shop extends AppCompatActivity {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("returnedPoints", pointscounter);
         setResult(RESULT_OK, returnIntent);
+
     }
 
     private void startActivityWithAnimation(Intent intent, @AnimRes int enterAnim, @AnimRes int exitAnim) {

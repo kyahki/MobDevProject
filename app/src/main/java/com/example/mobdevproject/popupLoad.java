@@ -1,6 +1,8 @@
 package com.example.mobdevproject;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +11,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class popupLoad extends AppCompatActivity {
+
+    int pointscounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,5 +24,10 @@ public class popupLoad extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Intent intent = getIntent();
+        pointscounter = intent.getIntExtra("points", 0);
+        TextView pointCounter = findViewById(R.id.pointCounter);
+        pointCounter.setText("Points: " + pointscounter);
     }
 }

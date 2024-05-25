@@ -1,8 +1,9 @@
 package com.example.mobdevproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
-import android.content.Intent;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.AnimRes;
@@ -13,8 +14,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class UserProfile extends AppCompatActivity {
 
-    float x1,x2,y1,y2;
+    float x1, x2, y1, y2;
+    int pointscounter;
     private static final int MIN_DISTANCE = 150;
+    private static final int REQUEST_CODE_SHOP = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,10 +29,16 @@ public class UserProfile extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Intent intent = getIntent();
+        pointscounter = intent.getIntExtra("points", 0);
+        TextView UserPointsText = findViewById(R.id.UserPoints);
+        UserPointsText.setText("Current Points: " + pointscounter);
     }
 
-    public boolean onTouchEvent(MotionEvent touchEvent){
-        switch(touchEvent.getAction()){
+    @Override
+    public boolean onTouchEvent(MotionEvent touchEvent) {
+        switch (touchEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 x1 = touchEvent.getX();
                 y1 = touchEvent.getY();
@@ -38,21 +48,26 @@ public class UserProfile extends AppCompatActivity {
                 y2 = touchEvent.getY();
                 float deltaX = x2 - x1;
                 float deltaY = y2 - y1;
-                if(Math.abs(deltaX) > MIN_DISTANCE || Math.abs(deltaY) > MIN_DISTANCE) {
+                if (Math.abs(deltaX) > MIN_DISTANCE || Math.abs(deltaY) > MIN_DISTANCE) {
                     if (Math.abs(deltaX) > Math.abs(deltaY)) {
                         if (x1 > x2) {
                             Intent i = new Intent(UserProfile.this, MainMenu.class);
                             startActivityWithAnimation(i, R.anim.slide_in_right, R.anim.slide_out_left);
+                            returnPointsToMainMenu();
+                            finish();
                         }
-//                        else {
-//                            Intent i = new Intent(UserProfile.this, UserProfile.class);
-//                            startActivityWithAnimation(i, R.anim.slide_in_left, R.anim.slide_out_right);
-//                        }
                     }
                 }
                 break;
         }
-        return false;
+        return super.onTouchEvent(touchEvent);
+    }
+
+    private void returnPointsToMainMenu() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("returnedPoints", pointscounter);
+        setResult(RESULT_OK, returnIntent);
+
     }
 
     private void startActivityWithAnimation(Intent intent, @AnimRes int enterAnim, @AnimRes int exitAnim) {
