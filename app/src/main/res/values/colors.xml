@@ -3,5 +3,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="green">#31A89A</color>
-
+    <color name="highlighted_color">#FFDD55</color> <!-- Highlight color -->
+    <color name="mainColor">#F8F5D9</color>
 </resources>
