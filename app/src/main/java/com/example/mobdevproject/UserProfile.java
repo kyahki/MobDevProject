@@ -3,6 +3,8 @@ package com.example.mobdevproject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -19,12 +21,14 @@ public class UserProfile extends AppCompatActivity {
     private static final int MIN_DISTANCE = 150;
     private static final int REQUEST_CODE_SHOP = 1;
 
+    Button btnLogout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_profile);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.buyLoad), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.userProfile), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -34,6 +38,16 @@ public class UserProfile extends AppCompatActivity {
         pointscounter = intent.getIntExtra("points", 0);
         TextView UserPointsText = findViewById(R.id.UserPoints);
         UserPointsText.setText("Current Points: " + pointscounter);
+
+        Button btnLogout = findViewById(R.id.logoutButton);
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserProfile.this, MainActivity.class);
+                intent.putExtra("points", pointscounter);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

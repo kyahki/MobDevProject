@@ -69,23 +69,21 @@ public class Shop extends AppCompatActivity {
             case MotionEvent.ACTION_DOWN:
                 x1 = touchEvent.getX();
                 y1 = touchEvent.getY();
-                break;
+                return true;  // Returning true to indicate event was handled
             case MotionEvent.ACTION_UP:
                 x2 = touchEvent.getX();
                 y2 = touchEvent.getY();
                 float deltaX = x2 - x1;
                 float deltaY = y2 - y1;
-                if (Math.abs(deltaX) > MIN_DISTANCE || Math.abs(deltaY) > MIN_DISTANCE) {
-                    if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                        if (x1 < x2) {
-                            Intent i = new Intent(Shop.this, MainMenu.class);
-                            startActivityWithAnimation(i, R.anim.slide_in_right, R.anim.slide_out_left);
-                            returnPointsToMainMenu();
-                            finish();
-                        }
+                if (Math.abs(deltaX) > MIN_DISTANCE && Math.abs(deltaX) > Math.abs(deltaY)) {
+                    if (x1 < x2) {
+                        Intent i = new Intent(Shop.this, MainMenu.class);
+                        startActivityWithAnimation(i, R.anim.slide_in_left, R.anim.slide_out_right);
+                        returnPointsToMainMenu();
+                        finish();
                     }
                 }
-                break;
+                return true;  // Returning true to indicate event was handled
         }
         return super.onTouchEvent(touchEvent);
     }
