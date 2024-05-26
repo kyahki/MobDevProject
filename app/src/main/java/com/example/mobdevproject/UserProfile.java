@@ -17,7 +17,8 @@ import androidx.core.view.WindowInsetsCompat;
 public class UserProfile extends AppCompatActivity {
 
     float x1, x2, y1, y2;
-    int pointscounter;
+    int pointscounter = 0;
+    int tasks = 0;
     private static final int MIN_DISTANCE = 150;
     private static final int REQUEST_CODE_SHOP = 1;
 
@@ -36,9 +37,11 @@ public class UserProfile extends AppCompatActivity {
 
         Intent intent = getIntent();
         pointscounter = intent.getIntExtra("points", 0);
+        tasks = intent.getIntExtra("tasks", 0);
         TextView UserPointsText = findViewById(R.id.UserPoints);
+        TextView tasksCompletedText = findViewById(R.id.tasksCompletedText);
         UserPointsText.setText("Current Points: " + pointscounter);
-
+        tasksCompletedText.setText("Completed Tasks: " + tasks);
         Button btnLogout = findViewById(R.id.logoutButton);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,10 +68,7 @@ public class UserProfile extends AppCompatActivity {
                 if (Math.abs(deltaX) > MIN_DISTANCE || Math.abs(deltaY) > MIN_DISTANCE) {
                     if (Math.abs(deltaX) > Math.abs(deltaY)) {
                         if (x1 > x2) {
-                            Intent i = new Intent(UserProfile.this, MainMenu.class);
-                            startActivityWithAnimation(i, R.anim.slide_in_right, R.anim.slide_out_left);
                             returnPointsToMainMenu();
-                            finish();
                         }
                     }
                 }
@@ -80,12 +80,8 @@ public class UserProfile extends AppCompatActivity {
     private void returnPointsToMainMenu() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("returnedPoints", pointscounter);
+        returnIntent.putExtra("returnedTasks", tasks);
         setResult(RESULT_OK, returnIntent);
-
-    }
-
-    private void startActivityWithAnimation(Intent intent, @AnimRes int enterAnim, @AnimRes int exitAnim) {
-        startActivity(intent);
-        overridePendingTransition(enterAnim, exitAnim);
+        finish();
     }
 }

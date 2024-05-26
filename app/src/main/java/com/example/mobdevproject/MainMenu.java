@@ -26,7 +26,7 @@ public class MainMenu extends AppCompatActivity {
     private static final int MIN_DISTANCE = 150;
     private List<String> tasks = new ArrayList<>();
     private int points = 0;
-
+    private int tasksFinished = 0;
     private int pointsReturned;
     private TextView currentTextView, pointCounter;
     private static final int REQUEST_CODE_SHOP = 1;
@@ -39,7 +39,6 @@ public class MainMenu extends AppCompatActivity {
         Button btnAddSched = findViewById(R.id.btnAddSched);
         ScrollView scrollView = findViewById(R.id.mainScrollView);
         pointCounter = findViewById(R.id.pointCounter);
-
 
         setTimeTextViewClickListener(R.id.sixam, "6:00 AM");
         setTimeTextViewClickListener(R.id.sevenam, "7:00 AM");
@@ -117,13 +116,11 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
-
         btnAddSched.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentTextView != null) {
                     showAddScheduleDialog(currentTextView.getText().toString());
-
                 } else {
                     Toast.makeText(MainMenu.this, "Select a time slot first", Toast.LENGTH_SHORT).show();
                 }
@@ -145,13 +142,16 @@ public class MainMenu extends AppCompatActivity {
                             if (x2 > x1) {
                                 Intent i = new Intent(MainMenu.this, UserProfile.class);
                                 i.putExtra("points", points);
+                                i.putExtra("tasks", tasksFinished);
+
                                 startActivityForResult(i, REQUEST_CODE_USER_PROFILE);
-                                startActivityWithAnimation(i, R.anim.slide_in_left, R.anim.slide_out_right);
+                                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                             } else {
                                 Intent i = new Intent(MainMenu.this, Shop.class);
                                 i.putExtra("points", points);
+                                i.putExtra("tasks",tasksFinished);
                                 startActivityForResult(i, REQUEST_CODE_SHOP);
-                                startActivityWithAnimation(i, R.anim.slide_in_right, R.anim.slide_out_left);
+                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             }
                         }
                         break;
@@ -159,22 +159,18 @@ public class MainMenu extends AppCompatActivity {
                 return false;
             }
         });
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode == REQUEST_CODE_SHOP || requestCode == REQUEST_CODE_USER_PROFILE) && resultCode == RESULT_OK) {
-            int returnedPoints = data.getIntExtra("returnedPoints", 0);
-            updatePoints(returnedPoints);
-        }
+
+        Intent update = getIntent();
+        points = update.getIntExtra("returnedPoints", 0);
+        tasksFinished = update.getIntExtra("returnedTasks", 0);
+        updatePoints(points);
+        updateTasksCompleted(tasksFinished);
     }
 
     private void startActivityWithAnimation(Intent intent, @AnimRes int enterAnim, @AnimRes int exitAnim) {
         startActivity(intent);
         overridePendingTransition(enterAnim, exitAnim);
     }
-
-
 
     private void setTimeTextViewClickListener(int textViewId, final String time) {
         TextView textView = findViewById(textViewId);
@@ -187,9 +183,13 @@ public class MainMenu extends AppCompatActivity {
         });
     }
 
-    private void updatePoints(int Newpoints) {
-        points = Newpoints;
+    private void updatePoints(int newPoints) {
+        points = newPoints;
         pointCounter.setText("Points: " + points);
+    }
+
+    private void updateTasksCompleted(int newTasksCompleted) {
+        tasksFinished = newTasksCompleted;
     }
 
     private void showAddScheduleDialog(String time) {
@@ -220,7 +220,8 @@ public class MainMenu extends AppCompatActivity {
                 if (!task.contains("[Completed]")) {
                     tasksForCurrentTime.set(position, "[Completed] " + task);
                     adapter.notifyDataSetChanged();
-                    points++;
+                    points+=20;
+                    tasksFinished++;
                     pointCounter.setText("Points: " + points);
                 }
             }
@@ -262,10 +263,23 @@ public class MainMenu extends AppCompatActivity {
         Dialog dialog = builder.create();
         dialog.show();
     }
-    private void recreateActivity() {
 
+    private void recreateActivity() {
         Intent intent = getIntent();
         finish();
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ((requestCode == REQUEST_CODE_USER_PROFILE || requestCode == REQUEST_CODE_SHOP) && resultCode == RESULT_OK) {
+            if (data != null) {
+                int returnedPoints = data.getIntExtra("returnedPoints", points);
+                int returnedTasks = data.getIntExtra("returnedTasks", tasksFinished);
+                updatePoints(returnedPoints);
+                updateTasksCompleted(returnedTasks);
+            }
+        }
     }
 }

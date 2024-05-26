@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class buyNetflix extends AppCompatActivity {
 
     int pointscounter;
+    int tasks;
 
     Button btn1month, btn3months, btn1year;
     float x1, x2, y1, y2;
@@ -35,6 +36,7 @@ public class buyNetflix extends AppCompatActivity {
 
         Intent intent = getIntent();
         pointscounter = intent.getIntExtra("points", 0);
+        tasks = intent.getIntExtra("tasks", 0);
         TextView pointCounter = findViewById(R.id.pointCounter);
         pointCounter.setText("Points: " + pointscounter);
 
@@ -50,14 +52,16 @@ public class buyNetflix extends AppCompatActivity {
     private void handleSubscription(int requiredPoints) {
         if (pointscounter >= requiredPoints) {
             int updatedPoints = pointscounter - requiredPoints;
-            Intent returnIntent = new Intent(buyNetflix.this, Shop.class);
-            returnIntent.putExtra("points", updatedPoints);
-            startActivity(returnIntent);
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("returnedPoints", updatedPoints);
+            returnIntent.putExtra("returnedTasks",tasks);
+            setResult(RESULT_OK, returnIntent);
             finish();
         } else {
             Toast.makeText(buyNetflix.this, "Insufficient Points", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent touchEvent) {
@@ -65,26 +69,27 @@ public class buyNetflix extends AppCompatActivity {
             case MotionEvent.ACTION_DOWN:
                 x1 = touchEvent.getX();
                 y1 = touchEvent.getY();
-                return true;  // Returning true to indicate event was handled
+                return true;
             case MotionEvent.ACTION_UP:
                 x2 = touchEvent.getX();
                 y2 = touchEvent.getY();
-                float deltaX = x2 - x1;
                 float deltaY = y2 - y1;
-                if (Math.abs(deltaY) > MIN_DISTANCE && Math.abs(deltaY) > Math.abs(deltaX)) {
+                if (Math.abs(deltaY) > MIN_DISTANCE && Math.abs(deltaY) > Math.abs(x2 - x1)) {
                     if (y1 < y2) {  // Swipe down
-                        Intent i = new Intent(buyNetflix.this, Shop.class);  // Replace with your target activity
-                        startActivityWithAnimation(i, R.anim.slide_in_up, R.anim.slide_out_down);
-                        finish();
+                        onBackPressed();
                     }
                 }
-                return true;  // Returning true to indicate event was handled
+                return true;
         }
         return super.onTouchEvent(touchEvent);
     }
 
-    private void startActivityWithAnimation(Intent intent, @AnimRes int enterAnim, @AnimRes int exitAnim) {
-        startActivity(intent);
-        overridePendingTransition(enterAnim, exitAnim);
+    @Override
+    public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("returnedPoints", pointscounter);
+        returnIntent.putExtra("returnedTasks", tasks);
+        setResult(RESULT_OK, returnIntent);
+        super.onBackPressed();
     }
 }

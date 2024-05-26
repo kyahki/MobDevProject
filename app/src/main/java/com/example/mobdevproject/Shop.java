@@ -1,16 +1,14 @@
 package com.example.mobdevproject;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.AnimRes;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -20,10 +18,13 @@ public class Shop extends AppCompatActivity {
 
     float x1, x2, y1, y2;
     int pointscounter;
+    int tasks;
 
-    LinearLayout popUpLoad;
+    private TextView pointsTextView;
     private static final int MIN_DISTANCE = 150;
+    private static final int REQUEST_CODE_SUBSCRIPTION = 1;
 
+    private static final int REQUEST_CODE_LOAD = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,21 +36,21 @@ public class Shop extends AppCompatActivity {
             return insets;
         });
 
-
         Intent intent = getIntent();
         pointscounter = intent.getIntExtra("points", 0);
+        tasks = intent.getIntExtra("tasks", 0);
 
-        TextView pointsTextView = findViewById(R.id.textView2);
-        pointsTextView.setText("Points: " + pointscounter);
+        pointsTextView = findViewById(R.id.textView2);
+        updatePoints(pointscounter);
 
         Button showLoad = findViewById(R.id.btnBuyLoad);
-
         showLoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Shop.this, popupLoad.class);
                 intent.putExtra("points", pointscounter);
-                startActivity(intent);
+                intent.putExtra("tasks", tasks);
+                startActivityForResult(intent, REQUEST_CODE_SUBSCRIPTION);
             }
         });
 
@@ -59,17 +60,19 @@ public class Shop extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Shop.this, buyNetflix.class);
                 intent.putExtra("points", pointscounter);
-                startActivity(intent);
+                intent.putExtra("tasks", tasks);
+                startActivityForResult(intent, REQUEST_CODE_SUBSCRIPTION);
             }
         });
     }
+
     @Override
     public boolean onTouchEvent(MotionEvent touchEvent) {
         switch (touchEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 x1 = touchEvent.getX();
                 y1 = touchEvent.getY();
-                return true;  // Returning true to indicate event was handled
+                return true;
             case MotionEvent.ACTION_UP:
                 x2 = touchEvent.getX();
                 y2 = touchEvent.getY();
@@ -77,26 +80,38 @@ public class Shop extends AppCompatActivity {
                 float deltaY = y2 - y1;
                 if (Math.abs(deltaX) > MIN_DISTANCE && Math.abs(deltaX) > Math.abs(deltaY)) {
                     if (x1 < x2) {
-                        Intent i = new Intent(Shop.this, MainMenu.class);
-                        startActivityWithAnimation(i, R.anim.slide_in_left, R.anim.slide_out_right);
                         returnPointsToMainMenu();
-                        finish();
                     }
                 }
-                return true;  // Returning true to indicate event was handled
+                return true;
         }
         return super.onTouchEvent(touchEvent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ((requestCode == REQUEST_CODE_SUBSCRIPTION || requestCode == REQUEST_CODE_LOAD) && resultCode == RESULT_OK) {
+            if (data != null) {
+                int returnedPoints = data.getIntExtra("returnedPoints", pointscounter);
+                int returnedTasks = data.getIntExtra("returnedTasks", tasks);
+                pointscounter = returnedPoints;
+                tasks = returnedTasks;
+
+                updatePoints(pointscounter);
+            }
+        }
     }
 
     private void returnPointsToMainMenu() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("returnedPoints", pointscounter);
+        returnIntent.putExtra("returnedTasks", tasks);
         setResult(RESULT_OK, returnIntent);
-
+        finish();
     }
-
-    private void startActivityWithAnimation(Intent intent, @AnimRes int enterAnim, @AnimRes int exitAnim) {
-        startActivity(intent);
-        overridePendingTransition(enterAnim, exitAnim);
+    private void updatePoints(int newPoints) {
+        pointscounter = newPoints;
+        pointsTextView.setText("Points: " + pointscounter);
     }
 }

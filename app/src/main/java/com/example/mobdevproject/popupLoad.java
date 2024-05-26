@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.AnimRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -21,8 +20,10 @@ public class popupLoad extends AppCompatActivity {
     int pointscounter;
     EditText amount;
 
+    int tasks;
     float x1, x2, y1, y2;
     private static final int MIN_DISTANCE = 150;
+    private static final int REQUEST_CODE_LOAD = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class popupLoad extends AppCompatActivity {
 
         Intent intent = getIntent();
         pointscounter = intent.getIntExtra("points", 0);
+        tasks = intent.getIntExtra("tasks",0);
         TextView pointCounter = findViewById(R.id.pointCounter);
         pointCounter.setText("Points: " + pointscounter);
 
@@ -48,15 +50,17 @@ public class popupLoad extends AppCompatActivity {
                 String amountText = amount.getText().toString();
                 if (!amountText.isEmpty()) {
                     int loadAmount = Integer.parseInt(amountText);
-                    int updatedPoints = pointscounter - (2 * loadAmount);
+                    int requiredPoints = 2 * loadAmount;
 
-                    if (pointscounter == 0 || pointscounter < (2 * loadAmount)) {
-                        Toast.makeText(popupLoad.this, "Insufficient Points", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Intent returnIntent = new Intent(popupLoad.this, Shop.class);
-                        returnIntent.putExtra("points", updatedPoints);
-                        startActivity(returnIntent);
+                    if (pointscounter >= requiredPoints) {
+                        int updatedPoints = pointscounter - requiredPoints;
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("returnedPoints", updatedPoints);
+                        returnIntent.putExtra("returnedTasks",tasks);
+                        setResult(RESULT_OK, returnIntent);
                         finish();
+                    } else {
+                        Toast.makeText(popupLoad.this, "Insufficient Points", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     amount.setError("Please enter an amount");
@@ -64,7 +68,6 @@ public class popupLoad extends AppCompatActivity {
             }
         });
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent touchEvent) {
@@ -76,13 +79,10 @@ public class popupLoad extends AppCompatActivity {
             case MotionEvent.ACTION_UP:
                 x2 = touchEvent.getX();
                 y2 = touchEvent.getY();
-                float deltaX = x2 - x1;
                 float deltaY = y2 - y1;
-                if (Math.abs(deltaY) > MIN_DISTANCE && Math.abs(deltaY) > Math.abs(deltaX)) {
+                if (Math.abs(deltaY) > MIN_DISTANCE && Math.abs(deltaY) > Math.abs(x2 - x1)) {
                     if (y1 < y2) {  // Swipe down
-                        Intent i = new Intent(popupLoad.this, Shop.class);  // Replace with your target activity
-                        startActivityWithAnimation(i, R.anim.slide_in_up, R.anim.slide_out_down);
-                        finish();
+                        onBackPressed();
                     }
                 }
                 return true;  // Returning true to indicate event was handled
@@ -90,8 +90,12 @@ public class popupLoad extends AppCompatActivity {
         return super.onTouchEvent(touchEvent);
     }
 
-    private void startActivityWithAnimation(Intent intent, @AnimRes int enterAnim, @AnimRes int exitAnim) {
-        startActivity(intent);
-        overridePendingTransition(enterAnim, exitAnim);
+    @Override
+    public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("returnedPoints", pointscounter);
+        returnIntent.putExtra("returnedTasks",tasks);
+        setResult(RESULT_OK, returnIntent);
+        super.onBackPressed();
     }
 }
